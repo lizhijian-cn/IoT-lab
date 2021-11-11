@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topelec.database.DatabaseHelper;
+import com.topelec.service.CardService;
+
 import it.moondroid.coverflowdemo.R;
 
 public class ResumeActivity extends Activity {
@@ -39,6 +41,10 @@ public class ResumeActivity extends Activity {
     private final static String CARD_ID = "card_id";
     private final static String SUM = "sum";
 
+    private CardService cardService = new CardService();
+    private boolean isPurchaseState = false;
+    private int cost = 0;
+
     /**
      * 用于同步UI,接受CardActivityGroup的broadcast
      */
@@ -56,14 +62,43 @@ public class ResumeActivity extends Activity {
                     hideMsgPage();
                     break;
                 case 3: //成功获取卡号
-                    String currentId = intent.getExtras().getString("Result");
-                    updateCardUI(currentId);
+                    String cardNo = intent.getExtras().getString("Result");
+                    if (!cardService.checkRegisterState(cardNo)) {
+                        showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_please_author_first),"","");
+                        return;
+                    }
+                    if (isPurchaseState) {
+                        int balance = cardService.consume(cardNo, cost);
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(balance), String.valueOf(cost));
+                        resetPurchaseState();
+                    } else {
+                        int balance = cardService.getBalance(cardNo);
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(balance), "0");
+                    }
+                    break;
+                case 4: // 购买套餐
+                    int cost = intent.getIntExtra("cost", 0);
+                    setPurchaseState(cost);
+                    break;
+                case 5: // 取消购买
+                    resetPurchaseState();
                     break;
                 default:
                     break;
             }
         }
     };
+
+    // 多线程环境下，需要保证原子性
+    private void setPurchaseState(int cost) {
+        isPurchaseState = true;
+        this.cost = cost;
+    }
+
+    private void resetPurchaseState() {
+        isPurchaseState = false;
+        cost = 0;
+    }
 
     private void hideMsgPage(){
 

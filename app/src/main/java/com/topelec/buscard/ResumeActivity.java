@@ -42,7 +42,11 @@ public class ResumeActivity extends Activity {
     private final static String SUM = "sum";
 
     private CardService cardService = new CardService();
-    private boolean isPurchaseState = false;
+    /**
+     * 0: 显示余额
+     * 1: 显示消费
+     */
+    private int isPurchaseState = 0;
     private int cost = 0;
 
     /**
@@ -60,6 +64,7 @@ public class ResumeActivity extends Activity {
                     break;
                 case 2://未检测到卡
                     hideMsgPage();
+                    resetPurchaseState();
                     break;
                 case 3: //成功获取卡号
                     String cardNo = intent.getExtras().getString("Result");
@@ -67,13 +72,16 @@ public class ResumeActivity extends Activity {
                         showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_please_author_first),"","");
                         return;
                     }
-                    if (isPurchaseState) {
-                        int balance = cardService.consume(cardNo, cost);
-                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
-                        resetPurchaseState();
-                    } else {
+                    if (isPurchaseState == 0) {
                         int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, "0", String.valueOf(balance));
+                    } else if (isPurchaseState == 1) {
+                        int balance = cardService.consume(cardNo, cost);
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
+                        isPurchaseState = 2;
+                    } else {
+                        int balance = cardService.getBalance(cardNo);
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
                     }
                     break;
                 case 4: // 购买套餐
@@ -91,12 +99,12 @@ public class ResumeActivity extends Activity {
 
     // 多线程环境下，需要保证原子性
     private void setPurchaseState(int cost) {
-        isPurchaseState = true;
+        isPurchaseState = 1;
         this.cost = cost;
     }
 
     private void resetPurchaseState() {
-        isPurchaseState = false;
+        isPurchaseState = 0;
         cost = 0;
     }
 

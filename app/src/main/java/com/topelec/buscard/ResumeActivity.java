@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,6 +73,7 @@ public class ResumeActivity extends Activity {
                         showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_please_author_first),"","");
                         return;
                     }
+                    System.out.printf("%s %d %d\n", cardNo, isPurchaseState, cost);
                     if (isPurchaseState == 0) {
                         int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, "0", String.valueOf(balance));
@@ -85,11 +87,8 @@ public class ResumeActivity extends Activity {
                     }
                     break;
                 case 4: // 购买套餐
-                    int cost = intent.getIntExtra("cost", 0);
-                    setPurchaseState(cost);
                     break;
                 case 5: // 取消购买
-                    resetPurchaseState();
                     break;
                 default:
                     break;
@@ -137,7 +136,25 @@ public class ResumeActivity extends Activity {
         idView = (TextView)findViewById(R.id.resume_idView);
         stepView = (TextView)findViewById(R.id.stepView);
         sumView = (TextView)findViewById(R.id.resume_sumView);
+
         hideMsgPage();
+
+        ImageButton btnPurchase = (ImageButton) findViewById(R.id.btn_purchase);
+        btnPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int cost = 10;
+                setPurchaseState(cost);
+            }
+        });
+
+        ImageButton btnCancel = (ImageButton) findViewById(R.id.btn_cancel_purchase);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetPurchaseState();
+            }
+        });
     }
 
     /**

@@ -208,6 +208,7 @@ public class CardActivityGroup extends ActivityGroup {
         mModulesControl = new ModulesControl(uiHandler);
         mModulesControl.actionControl(true);
         initMainView();
+        delayedHide(300);
         resumeView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -239,27 +240,6 @@ public class CardActivityGroup extends ActivityGroup {
             @Override
             public void onClick(View v) {
                 finish();
-            }
-        });
-
-        ImageButton btnPurchase = (ImageButton) findViewById(R.id.btn_purchase);
-        btnPurchase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(resume_action);
-                intent.putExtra("what", 4);
-                intent.putExtra("cost", 5);
-                sendBroadcast(intent);
-            }
-        });
-
-        ImageButton btnCancel = (ImageButton) findViewById(R.id.btn_cancel_purchase);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(resume_action);
-                intent.putExtra("what", 5);
-                sendBroadcast(intent);
             }
         });
     }
@@ -305,7 +285,6 @@ public class CardActivityGroup extends ActivityGroup {
         switch (flag) {
             case 0:
                 bodyView.removeAllViews();
-
                 bodyView.addView(getLocalActivityManager().startActivity("resume_radio",
                         new Intent(CardActivityGroup.this, ResumeActivity.class)).getDecorView());
                 break;

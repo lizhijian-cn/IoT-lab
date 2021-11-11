@@ -37,4 +37,21 @@
         android:textColor="@color/accent_material_light"
         android:gravity="left|center_vertical" />
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_purchase"
+        android:src="@drawable/buscard_button_author"
+        android:background="@drawable/btn_background"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="100dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_cancel_purchase"
+        android:src="@drawable/buscard_button_cancle"
+        android:background="@drawable/btn_background"
+        android:layout_marginLeft="292dp"
+        android:layout_marginTop="100dp" />
 </FrameLayout>

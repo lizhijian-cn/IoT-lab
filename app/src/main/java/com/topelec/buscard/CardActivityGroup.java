@@ -213,7 +213,7 @@ public class CardActivityGroup extends ActivityGroup {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 flag = 0;
-                getWindow().getDecorView().setBackgroundResource(R.drawable.buscard_consume_background);
+                getWindow().getDecorView().setBackgroundResource(R.drawable.restaurant_backgroud);
                 showView(flag);
                 resumeView.setBackgroundResource(R.drawable.frame_button_background);
                 rechargeView.setBackgroundResource(R.drawable.frame_button_nopressbg);
@@ -270,7 +270,7 @@ public class CardActivityGroup extends ActivityGroup {
 
     private void initView() {
         bodyView.removeAllViews();
-        this.getWindow().getDecorView().setBackgroundResource(R.drawable.buscard_consume_background);
+        this.getWindow().getDecorView().setBackgroundResource(R.drawable.restaurant_backgroud);
         View v = getLocalActivityManager().startActivity("resume_radio",new Intent(CardActivityGroup.this,ResumeActivity.class)).getDecorView();
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);

@@ -10,8 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,9 +43,10 @@ public class ResumeActivity extends Activity {
     private CardService cardService = new CardService();
     /**
      * 0: 显示余额
-     * 1: 显示消费
+     * 1: 购买待刷卡
+     * 2: 已购买
      */
-    private int isPurchaseState = 0;
+    private int purchaseState = 0;
     private int cost = 0;
 
     /**
@@ -65,7 +64,9 @@ public class ResumeActivity extends Activity {
                     break;
                 case 2://未检测到卡
                     hideMsgPage();
-                    resetPurchaseState();
+                    if (purchaseState == 2) {
+                        resetPurchaseState();
+                    }
                     break;
                 case 3: //成功获取卡号
                     String cardNo = intent.getExtras().getString("Result");
@@ -73,14 +74,14 @@ public class ResumeActivity extends Activity {
                         showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_please_author_first),"","");
                         return;
                     }
-                    System.out.printf("%s %d %d\n", cardNo, isPurchaseState, cost);
-                    if (isPurchaseState == 0) {
+                    System.out.printf("%s %d %d\n", cardNo, purchaseState, cost);
+                    if (purchaseState == 0) {
                         int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, "0", String.valueOf(balance));
-                    } else if (isPurchaseState == 1) {
+                    } else if (purchaseState == 1) {
                         int balance = cardService.consume(cardNo, cost);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
-                        isPurchaseState = 2;
+                        purchaseState = 2;
                     } else {
                         int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
@@ -97,13 +98,8 @@ public class ResumeActivity extends Activity {
     };
 
     // 多线程环境下，需要保证原子性
-    private void setPurchaseState(int cost) {
-        isPurchaseState = 1;
-        this.cost = cost;
-    }
-
     private void resetPurchaseState() {
-        isPurchaseState = 0;
+        purchaseState = 0;
         cost = 0;
     }
 
@@ -139,16 +135,43 @@ public class ResumeActivity extends Activity {
 
         hideMsgPage();
 
-        ImageButton btnPurchase = (ImageButton) findViewById(R.id.btn_purchase);
-        btnPurchase.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnBuy1 = (ImageButton) findViewById(R.id.btn_buy1);
+        btnBuy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int cost = 10;
-                setPurchaseState(cost);
+                purchaseState = 1;
+                cost = 5;
             }
         });
 
-        ImageButton btnCancel = (ImageButton) findViewById(R.id.btn_cancel_purchase);
+        ImageButton btnBuy2 = (ImageButton) findViewById(R.id.btn_buy4);
+        btnBuy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                purchaseState = 1;
+                cost = 10;
+            }
+        });
+
+        ImageButton btnBuy3 = (ImageButton) findViewById(R.id.btn_buy3);
+        btnBuy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                purchaseState = 1;
+                cost = 20;
+            }
+        });
+
+        ImageButton btnBuy4 = (ImageButton) findViewById(R.id.btn_buy4);
+        btnBuy1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                purchaseState = 1;
+                cost = 25;
+            }
+        });
+
+        ImageButton btnCancel = (ImageButton) findViewById(R.id.btn_cancel_buy);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

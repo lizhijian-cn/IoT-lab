@@ -38,20 +38,52 @@
         android:gravity="left|center_vertical" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_purchase"
-        android:src="@drawable/buscard_button_author"
+        android:id="@+id/btn_buy1"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="215dp"
+        android:layout_marginTop="170dp"
         android:background="@drawable/btn_background"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="100dp" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/restaurant_buy_btn" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_cancel_purchase"
-        android:src="@drawable/buscard_button_cancle"
+        android:id="@+id/btn_buy2"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="215dp"
+        android:layout_marginTop="395dp"
         android:background="@drawable/btn_background"
-        android:layout_marginLeft="292dp"
-        android:layout_marginTop="100dp" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/restaurant_buy_btn" />
+
+    <ImageButton
+        android:id="@+id/btn_buy3"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="495dp"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/btn_background"
+        android:scaleType="fitCenter"
+        android:src="@drawable/restaurant_buy_btn" />
+
+    <ImageButton
+        android:id="@+id/btn_buy4"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="495dp"
+        android:layout_marginTop="395dp"
+        android:background="@drawable/btn_background"
+        android:scaleType="fitCenter"
+        android:src="@drawable/restaurant_buy_btn" />
+
+    <ImageButton
+        android:id="@+id/btn_cancel_buy"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="480dp"
+        android:background="@drawable/btn_background"
+        android:scaleType="fitCenter"
+        android:src="@drawable/restaurant_cancel_btn" />
 </FrameLayout>

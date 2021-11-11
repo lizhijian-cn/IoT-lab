@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.topelec.database.DatabaseHelper;
+import com.topelec.service.CardService;
+
 import it.moondroid.coverflowdemo.R;
 
 public class RechargeActivity extends Activity {
@@ -36,6 +38,7 @@ public class RechargeActivity extends Activity {
 
     private String currentId = new String();
     private String oldId = new String();
+    private CardService cardService = new CardService();
 
     /***接收Group发送来的广播数据，同步更新UI***/
     BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -64,13 +67,14 @@ public class RechargeActivity extends Activity {
                     if (currentId == null) {
                         idView.setText("");
 //                        statusView.setImageDrawable(getResources().getDrawable(R.drawable.standby));
-                    }else {
+                    } else {
+                        updateUI(currentId);
                        // if (!currentId.equals(oldId)) { //检测到不同的卡
                             //TODO:查询数据库，存在：succeed；不存在：未授权
 
-                            updateCardUI(currentId);
-                            oldId = currentId;
-                            Log.v(TAG,"Result = "+ currentId+"");
+//                            updateCardUI(currentId);
+//                      oldId = currentId;
+//                            Log.v(TAG,"Result = "+ currentId+"");
                     //    } else {
                             //TODO:相同的卡，不做处理
                     //    }
@@ -85,6 +89,19 @@ public class RechargeActivity extends Activity {
 
         }
     };
+
+    private void updateUI(String cardNo) {
+        if (!cardService.checkRegisterState(cardNo)) { // 未注册
+            statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
+            idView.setText(getResources().getString(R.string.buscard_please_author_first));
+            sumView.setText("");
+        } else {
+            int balance = cardService.getBalance(cardNo);
+            idView.setText(cardNo);
+            statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
+            sumView.setText(String.valueOf(balance));
+        }
+    }
 
     /**数据库相关**/
     Context mContext;
@@ -126,28 +143,15 @@ public class RechargeActivity extends Activity {
                     rechargeText.setText("");
                     return;
                 }
-                String result = searchHFCard(CARD_ID,currentId);
-                if ( result == null ) {
-                    //TODO:插入新行
-                    if (insertHFCard(CARD_ID,currentId) != -1) {
-                        statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
-                        idView.setText(getResources().getString(R.string.buscard_author_succeed));
-                        updateCardUI(currentId);
-                    } else {
-                        statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
-                        idView.setText(getResources().getString(R.string.buscard_author_fail));
-                    };
-                } else if ( result.equals("-1")) {
-                    //TODO:查询到多行，错误
-
+                if (!cardService.checkRegisterState(currentId)) {
+                    cardService.register(currentId);
+                    statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
+                    idView.setText(getResources().getString(R.string.buscard_author_succeed));
+                    updateUI(currentId);
                 } else {
-                    //TODO:本卡已授权
-//                    statusView.setImageDrawable(getResources().getDrawable(R.drawable.authored_already));
                     statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
-//                    idView.setText(currentId);
                     idView.setText(R.string.buscard_authored_already);
                 }
-
             }
         });
 
@@ -164,16 +168,15 @@ public class RechargeActivity extends Activity {
                 builder.setTitle(getResources().getString(R.string.buscard_if_cancel_item));
                 builder.setPositiveButton(getResources().getString(R.string.buscard_OK), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //TODO:删除记录
-                        if (deleteHFCard(CARD_ID,currentId) != 0) {
-                            statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
-                            idView.setText(getResources().getString(R.string.buscard_cancel_author_succeed));
-                            sumView.setText("");
-                            idView.setText("");
-
-                        }else {
+                        if (!cardService.checkRegisterState(currentId)) {
                             statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
                             idView.setText(getResources().getString(R.string.buscard_cancel_author_fail));
+                            sumView.setText("");
+                            idView.setText("");
+                        } else {
+                            cardService.unregister(currentId);
+                            statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
+                            idView.setText(getResources().getString(R.string.buscard_cancel_author_succeed));
                             sumView.setText("");
                             idView.setText("");
                         }
@@ -200,32 +203,17 @@ public class RechargeActivity extends Activity {
                 if (currentId == null || currentId.length() == 0 || value == null || value.length() == 0) {
                     return;
                 }
-                String result = searchHFCard(CARD_ID,currentId);
-                if ( result == null) {
+                if (!cardService.checkRegisterState(currentId)) {
                     statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
                     idView.setText(getResources().getString(R.string.buscard_please_author_first));
                     return;
-
-                }else {
-
-                    String newSum = updateHFCard(CARD_ID,currentId,SUM,String.valueOf(value));
-                    if ( newSum == null) {
-                        statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_wrong));
-                        idView.setText(getResources().getString(R.string.buscard_recharge_fail));
-
-                    }else {
-                        statusView.setImageDrawable(getResources().getDrawable(R.drawable.buscard_symbol_right));
-                        idView.setText(getResources().getString(R.string.buscard_recharge_succeed));
-                        sumView.setText(newSum);
-                        rechargeText.setText("");
-
-                    }
                 }
+                int balance = cardService.recharge(currentId, Integer.parseInt(String.valueOf(value)));
+                idView.setText(getResources().getString(R.string.buscard_recharge_succeed));
+                sumView.setText(String.valueOf(balance));
+                rechargeText.setText("");
             }
         });
-
-
-
     }
 
     /**
@@ -337,7 +325,6 @@ public class RechargeActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateCardUI(currentId);
     }
 
     @Override

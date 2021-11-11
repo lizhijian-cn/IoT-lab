@@ -11,6 +11,23 @@
         android:id="@+id/body">
     </FrameLayout>
 
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_purchase"
+        android:src="@drawable/buscard_button_author"
+        android:background="@drawable/btn_background"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="270dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_cancel_purchase"
+        android:src="@drawable/buscard_button_cancle"
+        android:background="@drawable/btn_background"
+        android:layout_marginLeft="292dp"
+        android:layout_marginTop="270dp" />
     <!--底部功能菜单栏  -->
     <FrameLayout
         android:layout_width="match_parent"

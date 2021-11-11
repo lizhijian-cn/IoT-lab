@@ -69,11 +69,11 @@ public class ResumeActivity extends Activity {
                     }
                     if (isPurchaseState) {
                         int balance = cardService.consume(cardNo, cost);
-                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(balance), String.valueOf(cost));
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
                         resetPurchaseState();
                     } else {
                         int balance = cardService.getBalance(cardNo);
-                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(balance), "0");
+                        showMsgPage(R.drawable.buscard_consume_check_right, cardNo, "0", String.valueOf(balance));
                     }
                     break;
                 case 4: // 购买套餐
@@ -112,7 +112,6 @@ public class ResumeActivity extends Activity {
         idView.setText(cardId);
         stepView.setText(stepNum);
         sumView.setText(sumNum);
-
     }
 
     @Override

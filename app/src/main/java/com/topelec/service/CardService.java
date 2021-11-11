@@ -37,10 +37,12 @@ public class CardService {
         return balance;
     }
 
-    public void recharge(String cardNo, int cost) {
+    public int recharge(String cardNo, int cost) {
         if (!BalanceMap.containsKey(cardNo)) {
             throw ex;
         }
-        BalanceMap.put(cardNo, BalanceMap.get(cardNo) + cost);
+        int balance = BalanceMap.get(cardNo) + cost;
+        BalanceMap.put(cardNo, balance);
+        return balance;
     }
 }

@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.topelec.rfidcontrol.ModulesControl;
@@ -208,8 +209,6 @@ public class CardActivityGroup extends ActivityGroup {
         mModulesControl.actionControl(true);
         initMainView();
         resumeView.setOnClickListener(new View.OnClickListener() {
-
-
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 flag = 0;
@@ -218,7 +217,6 @@ public class CardActivityGroup extends ActivityGroup {
                 resumeView.setBackgroundResource(R.drawable.frame_button_background);
                 rechargeView.setBackgroundResource(R.drawable.frame_button_nopressbg);
                 delayedHide(300);
-
             }
         });
         rechargeView.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +242,26 @@ public class CardActivityGroup extends ActivityGroup {
             }
         });
 
+        ImageButton btnPurchase = (ImageButton) findViewById(R.id.btn_purchase);
+        btnPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(resume_action);
+                intent.putExtra("what", 4);
+                intent.putExtra("cost", 5);
+                sendBroadcast(intent);
+            }
+        });
+
+        ImageButton btnCancel = (ImageButton) findViewById(R.id.btn_cancel_purchase);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(resume_action);
+                intent.putExtra("what", 5);
+                sendBroadcast(intent);
+            }
+        });
     }
 
     @Override

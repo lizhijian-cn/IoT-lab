@@ -98,6 +98,11 @@ public class ResumeActivity extends Activity {
     };
 
     // 多线程环境下，需要保证原子性
+    private void purchase(int cost) {
+        purchaseState = 1;
+        this.cost = cost;
+    }
+
     private void resetPurchaseState() {
         purchaseState = 0;
         cost = 0;
@@ -139,35 +144,31 @@ public class ResumeActivity extends Activity {
         btnBuy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                purchaseState = 1;
-                cost = 5;
+                purchase(12);
             }
         });
 
-        ImageButton btnBuy2 = (ImageButton) findViewById(R.id.btn_buy4);
-        btnBuy1.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnBuy2 = (ImageButton) findViewById(R.id.btn_buy2);
+        btnBuy2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                purchaseState = 1;
-                cost = 10;
+                purchase(20);
             }
         });
 
         ImageButton btnBuy3 = (ImageButton) findViewById(R.id.btn_buy3);
-        btnBuy1.setOnClickListener(new View.OnClickListener() {
+        btnBuy3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                purchaseState = 1;
-                cost = 20;
+                purchase(25);
             }
         });
 
         ImageButton btnBuy4 = (ImageButton) findViewById(R.id.btn_buy4);
-        btnBuy1.setOnClickListener(new View.OnClickListener() {
+        btnBuy4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                purchaseState = 1;
-                cost = 25;
+                purchase(15);
             }
         });
 

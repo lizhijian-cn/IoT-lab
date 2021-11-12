@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.topelec.database.DatabaseHelper;
 import com.topelec.service.CardService;
+import com.topelec.zigbeecontrol.SensorControl;
 
 import it.moondroid.coverflowdemo.R;
 
@@ -40,6 +41,7 @@ public class ResumeActivity extends Activity {
     private final static String CARD_ID = "card_id";
     private final static String SUM = "sum";
 
+    private SensorControl sensorControl;
     private CardService cardService = new CardService();
     /**
      * 0: 显示余额
@@ -48,6 +50,7 @@ public class ResumeActivity extends Activity {
      */
     private int purchaseState = 0;
     private int cost = 0;
+    private int led = 0;
 
     /**
      * 用于同步UI,接受CardActivityGroup的broadcast
@@ -72,18 +75,35 @@ public class ResumeActivity extends Activity {
                     String cardNo = intent.getExtras().getString("Result");
                     if (!cardService.checkRegisterState(cardNo)) {
                         showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_please_author_first),"","");
-                        return;
+                        break;
                     }
                     System.out.printf("%s %d %d\n", cardNo, purchaseState, cost);
+                    int balance = cardService.getBalance(cardNo);
                     if (purchaseState == 0) {
-                        int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, "0", String.valueOf(balance));
                     } else if (purchaseState == 1) {
-                        int balance = cardService.consume(cardNo, cost);
+                        if (cost > balance) {
+                            showMsgPage(R.drawable.buscard_consume_check_wrong,getResources().getString(R.string.buscard_shortage),"", String.valueOf(balance));
+                            break;
+                        }
+                        balance = cardService.consume(cardNo, cost);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
                         purchaseState = 2;
+                        switch (led) {
+                            case 1:
+                                sensorControl.led1_On(true);
+                                break;
+                            case 2:
+                                sensorControl.led2_On(true);
+                                break;
+                            case 3:
+                                sensorControl.led3_On(true);
+                                break;
+                            case 4:
+                                sensorControl.led4_On(true);
+                                break;
+                        }
                     } else {
-                        int balance = cardService.getBalance(cardNo);
                         showMsgPage(R.drawable.buscard_consume_check_right, cardNo, String.valueOf(cost), String.valueOf(balance));
                     }
                     break;
@@ -106,6 +126,21 @@ public class ResumeActivity extends Activity {
     private void resetPurchaseState() {
         purchaseState = 0;
         cost = 0;
+        switch (led) {
+            case 1:
+                sensorControl.led1_Off(true);
+                break;
+            case 2:
+                sensorControl.led2_Off(true);
+                break;
+            case 3:
+                sensorControl.led3_Off(true);
+                break;
+            case 4:
+                sensorControl.led4_Off(true);
+                break;
+        }
+        led = 0;
     }
 
     private void hideMsgPage(){
@@ -144,6 +179,7 @@ public class ResumeActivity extends Activity {
         btnBuy1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                led = 1;
                 purchase(12);
             }
         });
@@ -152,6 +188,7 @@ public class ResumeActivity extends Activity {
         btnBuy2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                led = 2;
                 purchase(20);
             }
         });
@@ -160,6 +197,7 @@ public class ResumeActivity extends Activity {
         btnBuy3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                led = 3;
                 purchase(25);
             }
         });
@@ -168,6 +206,7 @@ public class ResumeActivity extends Activity {
         btnBuy4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                led = 4;
                 purchase(15);
             }
         });
@@ -179,6 +218,9 @@ public class ResumeActivity extends Activity {
                 resetPurchaseState();
             }
         });
+
+        sensorControl = new SensorControl();
+        sensorControl.actionControl(true);
     }
 
     /**
@@ -201,7 +243,6 @@ public class ResumeActivity extends Activity {
                 if (Double.toString(newSum).equals(updateHFCard(CARD_ID, CardId, SUM, Double.toString(newSum)))) {
                     showMsgPage(R.drawable.buscard_consume_check_right,CardId,Double.toString(stepValue),Double.toString(newSum));
                 }
-
             }
 
         }
@@ -267,4 +308,15 @@ public class ResumeActivity extends Activity {
         super.onStop();
         unregisterReceiver(broadcastReceiver);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sensorControl.actionControl(false);
+    }
+
+    //    @Override
+//    public void LedControlResult(byte led_id, byte led_status) {
+//
+//    }
 }

@@ -146,7 +146,7 @@ public class SensorControl {
     }
 
     public void actionControl(boolean isOpen) {
-
+        Log.d(TAG, "actionControl(" + isOpen + ")");
         if (isOpen) {
 //            try {
 //                initUart();

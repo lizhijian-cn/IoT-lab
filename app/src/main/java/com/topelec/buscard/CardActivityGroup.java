@@ -179,7 +179,6 @@ public class CardActivityGroup extends ActivityGroup {
 
                     }
 //                    Log.v(TAG,"Result = "+ data.getString("cardNo"));
-
                     break;
                 default:
                     break;

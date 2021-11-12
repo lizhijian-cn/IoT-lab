@@ -14,6 +14,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import realarm.hardware.HardwareControl;
 
@@ -88,8 +89,8 @@ public class ModulesControl {
      * 线程控制
      */
     public void actionControl(boolean isOpen) {
+        Log.v(TAG, "actionControl(" + isOpen + ")");
         if (isOpen) {
-
             if (mHFReadThread == null)
                 mHFReadThread = new HFReadThread();
             if (mHFWriteThread == null)
@@ -673,7 +674,7 @@ public class ModulesControl {
                         uiHandler.sendMessage(msg);
                         Thread.currentThread().interrupt();//终端线程
                     }
-//                    Log.v(TAG,"TYPE A FAIL");
+                    Log.v(TAG,"TYPE A FAIL");
                 }
             }
         }
@@ -739,7 +740,7 @@ public class ModulesControl {
             Message msg = new Message();
             Bundle data = new Bundle();
 
-
+//            Log.v(TAG, "read hf: cmd=" + whichCmd + ", data=" + Arrays.toString(g_ReceiveData));
             switch (whichCmd) {
                 case 0x3A:    //设置卡片类型成功，TypeA
                     msg.what = Command.HF_TYPE;

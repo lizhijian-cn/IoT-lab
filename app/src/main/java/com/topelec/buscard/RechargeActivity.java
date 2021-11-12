@@ -74,7 +74,7 @@ public class RechargeActivity extends Activity {
 
 //                            updateCardUI(currentId);
 //                      oldId = currentId;
-//                            Log.v(TAG,"Result = "+ currentId+"");
+                            Log.v(TAG,"Result = "+ currentId+"");
                     //    } else {
                             //TODO:相同的卡，不做处理
                     //    }

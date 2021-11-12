@@ -1,7 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.topelec.buscard.RechargeActivity">
+    tools:context="com.topelec.buscard.RechargeActivity"
+    android:background="@drawable/buscard_recharge_background">
 
 
     <ImageView
@@ -10,7 +11,7 @@
         android:id="@+id/resume_statusView"
         android:src="@drawable/buscard_recharge_standby"
         android:scaleType="fitCenter"
-        android:layout_marginLeft="90dp"
+        android:layout_marginLeft="580dp"
         android:layout_marginTop="120dp" />
 
     <TextView
@@ -18,33 +19,35 @@
         android:layout_height="wrap_content"
         android:id="@+id/idView"
         android:hint="此处显示卡号"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="590dp"
         android:layout_marginTop="260dp" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/btn_author"
-        android:src="@drawable/buscard_button_author"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="762dp"
+        android:layout_marginTop="152dp"
         android:background="@drawable/btn_background"
-        android:layout_marginLeft="292dp"
-        android:layout_marginTop="152dp" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/buscard_button_author" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/btn_cancel_author"
-        android:src="@drawable/buscard_button_cancle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="855dp"
+        android:layout_marginTop="152dp"
+        android:scaleType="fitCenter"
         android:background="@drawable/btn_background"
-        android:layout_marginLeft="385dp"
-        android:layout_marginTop="152dp" />
+        android:src="@drawable/buscard_button_cancle" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/resume_sumView"
         android:layout_marginTop="357dp"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="665dp"
         android:textColor="@color/accent_material_light"
         android:textSize="20dp" />
     <EditText
@@ -54,17 +57,19 @@
         android:ems="7"
         android:id="@+id/rechargeText"
         android:hint="@string/buscard_recharge_hint"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="660dp"
         android:layout_marginTop="430dp"
         android:textColor="@color/accent_material_light"
         android:textSize="20dp" />
+
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/btnRecharge"
-        android:src="@drawable/buscard_button_recharge"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="850dp"
+        android:layout_marginTop="400dp"
+        android:scaleType="fitCenter"
         android:background="@drawable/btn_background"
-        android:layout_marginLeft="340dp"
-        android:layout_marginTop="400dp" />
+        android:src="@drawable/buscard_button_recharge" />
 
 </FrameLayout>

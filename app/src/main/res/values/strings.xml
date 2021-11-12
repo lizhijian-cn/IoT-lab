@@ -12,7 +12,8 @@
 
     <drawable name="clr_normal">#00000000</drawable>
     <drawable name="clr_pressed">#9FC2C5BF</drawable>
-    <string name="back">回主页</string>
+    <string name="back"></string>
+<!--    回主页-->
 
     <!--智能家居-->
     <string name="smarthome_settings">智能家居系统设置</string>

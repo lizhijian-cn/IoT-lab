@@ -81,8 +81,8 @@
         android:id="@+id/btn_cancel_buy"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="480dp"
+        android:layout_marginLeft="715dp"
+        android:layout_marginTop="70dp"
         android:background="@drawable/btn_background"
         android:scaleType="fitCenter"
         android:src="@drawable/restaurant_cancel_btn" />

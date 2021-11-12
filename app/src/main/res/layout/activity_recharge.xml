@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/resume_sumView"
-        android:layout_marginTop="357dp"
+        android:layout_marginTop="365dp"
         android:layout_marginLeft="665dp"
         android:textColor="@color/accent_material_light"
         android:textSize="20dp" />
